@@ -1,0 +1,26 @@
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
+  try {
+    const response = await fetch(
+      'https://api.universityism.com/API/Master/GetSemesterGroup_Campus_Semester_wise_forGuest',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': '*/*',
+          'Origin': 'https://timetable.ism.edu.kg',
+          'Referer': 'https://timetable.ism.edu.kg/',
+        },
+        body: JSON.stringify(req.body),
+      }
+    );
+    const data = await response.json();
+    res.status(200).json(data);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+}
