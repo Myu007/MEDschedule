@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IHSM Timetable</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0f1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1f2d45;
+    --accent: #3b82f6;
+    --accent2: #06b6d4;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --row-even: #0f1929;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(59,130,246,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 100%, rgba(6,182,212,0.05) 0%, transparent 50%);
+  }
+  header {
+    display: flex; align-items: center; gap: 14px;
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(17,24,39,0.85);
+    backdrop-filter: blur(12px);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .logo-mark {
+    width:36px; height:36px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius:10px; display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:14px; color:white; flex-shrink:0;
+  }
+  header h1 { font-size:1rem; font-weight:600; }
+  header span { font-size:.75rem; color:var(--muted); font-weight:300; }
+  .badge {
+    margin-left:auto; font-size:.65rem; font-family:'DM Mono',monospace;
+    background:rgba(59,130,246,.15); color:var(--accent);
+    border:1px solid rgba(59,130,246,.3); padding:3px 10px; border-radius:20px;
+  }
+  main { padding:28px; max-width:960px; margin:0 auto; }
+  .controls {
+    background:var(--surface); border:1px solid var(--border); border-radius:16px;
+    padding:22px; display:grid; grid-template-columns:1fr 1fr 1fr auto;
+    gap:12px; align-items:end; margin-bottom:24px;
+  }
+  @media(max-width:680px){ .controls{ grid-template-columns:1fr; } main{ padding:16px; } }
+  label {
+    display:block; font-size:.65rem; font-family:'DM Mono',monospace;
+    text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:7px;
+  }
+  select, input[type="month"] {
+    width:100%; background:var(--surface2); border:1px solid var(--border);
+    color:var(--text); padding:10px 14px; border-radius:10px;
+    font-family:'Sora',sans-serif; font-size:.82rem;
+    appearance:none; -webkit-appearance:none; cursor:pointer;
+    transition:border-color .2s,box-shadow .2s; outline:none;
+  }
+  select:focus, input[type="month"]:focus {
+    border-color:var(--accent); box-shadow:0 0 0 3px rgba(59,130,246,.15);
+  }
+  select:disabled { opacity:.4; cursor:not-allowed; }
+  .select-wrap { position:relative; }
+  .select-wrap::after {
+    content:'▾'; position:absolute; right:12px; top:50%;
+    transform:translateY(-50%); color:var(--muted); pointer-events:none; font-size:.75rem;
+  }
+  input[type="month"]::-webkit-calendar-picker-indicator { filter:invert(.5); cursor:pointer; }
+  button#searchBtn {
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    border:none; color:white; padding:10px 24px; border-radius:10px;
+    font-family:'Sora',sans-serif; font-size:.85rem; font-weight:600;
+    cursor:pointer; transition:opacity .2s,transform .1s; white-space:nowrap;
+  }
+  button#searchBtn:hover{ opacity:.88; }
+  button#searchBtn:active{ transform:scale(.97); }
+  button#searchBtn:disabled{ opacity:.4; cursor:not-allowed; transform:none; }
+
+  .error-banner {
+    background:rgba(239,68,68,.1); border:1px solid rgba(239,68,68,.3);
+    color:#fca5a5; padding:12px 16px; border-radius:10px;
+    font-size:.8rem; margin-bottom:20px; display:none;
+  }
+  .status { text-align:center; padding:60px 20px; color:var(--muted); font-size:.85rem; }
+  .status .icon { font-size:2.5rem; margin-bottom:12px; opacity:.5; }
+  .spinner {
+    width:28px; height:28px; border:2px solid var(--border);
+    border-top-color:var(--accent); border-radius:50%;
+    animation:spin .7s linear infinite; margin:0 auto 14px;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .results-header {
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:14px; flex-wrap:wrap; gap:10px;
+  }
+  .results-title { font-size:.75rem; font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); }
+  .results-count {
+    font-size:.72rem; font-family:'DM Mono',monospace; color:var(--accent2);
+    background:rgba(6,182,212,.1); border:1px solid rgba(6,182,212,.2);
+    padding:3px 10px; border-radius:20px;
+  }
+  .table-wrap { border:1px solid var(--border); border-radius:14px; overflow:hidden; overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; font-size:.82rem; }
+  thead tr { background:var(--surface2); border-bottom:1px solid var(--border); }
+  th {
+    padding:11px 16px; text-align:left; font-size:.65rem;
+    font-family:'DM Mono',monospace; text-transform:uppercase;
+    letter-spacing:.1em; color:var(--muted); white-space:nowrap; font-weight:500;
+  }
+  tbody tr { border-bottom:1px solid var(--border); transition:background .15s; }
+  tbody tr:last-child { border-bottom:none; }
+  tbody tr:nth-child(even) { background:var(--row-even); }
+  tbody tr:hover { background:rgba(59,130,246,.06); }
+  td { padding:13px 16px; vertical-align:top; line-height:1.4; }
+  .td-time { font-family:'DM Mono',monospace; font-size:.78rem; white-space:nowrap; }
+  .td-subject { font-weight:600; max-width:260px; }
+  .td-subject .sub-detail { font-weight:300; font-size:.72rem; color:var(--muted); margin-top:2px; }
+  .room-chip {
+    display:inline-block; background:rgba(59,130,246,.12);
+    border:1px solid rgba(59,130,246,.25); color:#93c5fd;
+    padding:2px 8px; border-radius:6px; font-size:.72rem; font-family:'DM Mono',monospace;
+  }
+  .td-teacher { font-size:.78rem; color:var(--muted); }
+  .week-chip {
+    display:inline-block; background:rgba(16,185,129,.1); border:1px solid rgba(16,185,129,.2);
+    color:#6ee7b7; padding:2px 7px; border-radius:6px; font-family:'DM Mono',monospace; font-size:.68rem;
+  }
+  .day-separator td {
+    background:rgba(59,130,246,.04); padding:7px 16px; font-size:.7rem;
+    font-family:'DM Mono',monospace; color:var(--accent); letter-spacing:.08em;
+    text-transform:uppercase; border-top:1px solid rgba(59,130,246,.15); font-weight:500;
+  }
+  footer {
+    text-align:center; padding:28px; font-size:.7rem; color:var(--muted);
+    font-family:'DM Mono',monospace; border-top:1px solid var(--border);
+    margin-top:40px; letter-spacing:.05em;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-mark">IH</div>
+  <div>
+    <h1>IHSM Timetable</h1>
+    <span>International School of Medicine</span>
+  </div>
+  <div class="badge">FAST ⚡</div>
+</header>
+
+<main>
+  <div class="controls">
+    <div>
+      <label>Semester</label>
+      <div class="select-wrap">
+        <select id="semesterSelect">
+          <option value="">— Choose semester —</option>
+          <option value="1">1st Course · 1st Sem</option>
+          <option value="2">1st Course · 2nd Sem</option>
+          <option value="3">2nd Course · 3rd Sem</option>
+          <option value="4">2nd Course · 4th Sem</option>
+          <option value="5">3rd Course · 5th Sem</option>
+          <option value="6">3rd Course · 6th Sem</option>
+          <option value="7">4th Course · 7th Sem</option>
+          <option value="8">4th Course · 8th Sem</option>
+          <option value="9">5th Course · 9th Sem</option>
+          <option value="10">5th Course · 10th Sem</option>
+        </select>
+      </div>
+    </div>
+    <div>
+      <label>Group</label>
+      <div class="select-wrap">
+        <select id="groupSelect" disabled>
+          <option value="">— Select semester first —</option>
+        </select>
+      </div>
+    </div>
+    <div>
+      <label>Month</label>
+      <input type="month" id="monthInput" />
+    </div>
+    <div>
+      <label style="visibility:hidden">Go</label>
+      <button id="searchBtn" disabled>Search</button>
+    </div>
+  </div>
+
+  <div class="error-banner" id="errorBanner"></div>
+
+  <div id="resultsArea">
+    <div class="status">
+      <div class="icon">📅</div>
+      Select a semester and group to load the schedule
+    </div>
+  </div>
+</main>
+
+<footer>IHSM TIMETABLE · CAMPUS 7 · ISM.EDU.KG</footer>
+
+<script>
+const CAMPUS_ID = 7;
+
+const semSel    = document.getElementById('semesterSelect');
+const grpSel    = document.getElementById('groupSelect');
+const monthInp  = document.getElementById('monthInput');
+const searchBtn = document.getElementById('searchBtn');
+const results   = document.getElementById('resultsArea');
+const errBanner = document.getElementById('errorBanner');
+
+const now = new Date();
+monthInp.value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+
+const showErr = msg => { errBanner.textContent = msg; errBanner.style.display = 'block'; };
+const hideErr = ()  => { errBanner.style.display = 'none'; };
+const loading = msg => { results.innerHTML = `<div class="status"><div class="spinner"></div>${msg}</div>`; };
+
+async function post(path, body) {
+  const r = await fetch(path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) throw new Error(`Server error ${r.status}`);
+  return r.json();
+}
+
+semSel.addEventListener('change', async () => {
+  const semId = parseInt(semSel.value);
+  grpSel.disabled = true;
+  grpSel.innerHTML = '<option value="">Loading…</option>';
+  searchBtn.disabled = true;
+  hideErr();
+  if (!semId) { grpSel.innerHTML = '<option value="">— Select semester first —</option>'; return; }
+
+  try {
+    const json = await post('/api/groups', { intCampusId: CAMPUS_ID, intSemesterId: semId });
+    const groups = json?.data?.data || json?.data || [];
+    if (!groups.length) { grpSel.innerHTML = '<option value="">No groups found</option>'; return; }
+
+    grpSel.innerHTML = '<option value="">— Choose group —</option>';
+    groups.forEach(g => {
+      const opt = document.createElement('option');
+      opt.value = g.intId;
+      opt.textContent = `Group ${g.strName}`;
+      grpSel.appendChild(opt);
+    });
+    grpSel.disabled = false;
+  } catch(e) {
+    grpSel.innerHTML = '<option value="">— Error —</option>';
+    showErr('Could not load groups: ' + e.message);
+  }
+});
+
+grpSel.addEventListener('change', () => { searchBtn.disabled = !grpSel.value; });
+
+searchBtn.addEventListener('click', async () => {
+  const semId = parseInt(semSel.value);
+  const grpId = parseInt(grpSel.value);
+  const [year, month] = monthInp.value.split('-').map(Number);
+  if (!grpId || !year) return;
+
+  hideErr(); loading('Fetching schedule…'); searchBtn.disabled = true;
+
+  try {
+    const json = await post('/api/schedule', {
+      intCampusId: CAMPUS_ID, intSemesterId: semId,
+      intGroupId: grpId, intYear: year, intMonth: month, strFacultyName: ''
+    });
+    const rows = json?.data?.data || json?.data || [];
+    renderSchedule(rows);
+  } catch(e) {
+    showErr(e.message);
+    results.innerHTML = `<div class="status"><div class="icon">⚠️</div>${e.message}</div>`;
+  } finally { searchBtn.disabled = false; }
+});
+
+const DN = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function renderSchedule(rows) {
+  if (!rows.length) {
+    results.innerHTML = `<div class="status"><div class="icon">🗓️</div>No classes for this period.</div>`;
+    return;
+  }
+
+  const byDate = {};
+  rows.forEach(r => {
+    const key = r.strDate || r.dttDate || r.ClassDate || r.date || r.Date || '';
+    if (!byDate[key]) byDate[key] = [];
+    byDate[key].push(r);
+  });
+
+  const sorted = Object.keys(byDate).sort((a,b) => new Date(a)-new Date(b));
+
+  let html = `
+    <div class="results-header">
+      <span class="results-title">Schedule</span>
+      <span class="results-count">${rows.length} class${rows.length!==1?'es':''}</span>
+    </div>
+    <div class="table-wrap"><table>
+    <thead><tr><th>Date</th><th>#</th><th>Time</th><th>Subject</th><th>Room</th><th>Teacher</th><th>Week</th></tr></thead>
+    <tbody>`;
+
+  sorted.forEach(dk => {
+    const d = new Date(dk);
+    const label = isNaN(d) ? dk : `${DN[d.getDay()]}, ${d.getDate()} ${MN[d.getMonth()]} ${d.getFullYear()}`;
+    html += `<tr class="day-separator"><td colspan="7">📅 ${label}</td></tr>`;
+
+    byDate[dk].forEach(r => {
+      const subject = r.strSubjectName || r.SubjectName || r.strSubject || '—';
+      const stype   = r.strSubjectType || r.SubjectType || r.strClassType || '';
+      const teacher = r.strTeacherName || r.TeacherName || r.strTeacher || '—';
+      const room    = r.strRoomName || r.RoomName || r.intRoomNo || r.RoomNo || '—';
+      const num     = r.intPeriodNo || r.PeriodNo || '';
+      const week    = r.intWeekNo   || r.WeekNo   || '';
+      const ts      = r.strStartTime || r.StartTime || '';
+      const te      = r.strEndTime   || r.EndTime   || '';
+      const time    = ts && te ? `${ts} – ${te}` : (r.strTime || r.Time || '—');
+
+      html += `<tr>
+        <td class="td-date"></td>
+        <td style="font-family:'DM Mono',monospace;font-size:.78rem;color:var(--muted)">${num}</td>
+        <td class="td-time">${time}</td>
+        <td class="td-subject">${subject}${stype?`<div class="sub-detail">${stype}</div>`:''}</td>
+        <td class="td-room"><span class="room-chip">${room}</span></td>
+        <td class="td-teacher">${teacher}</td>
+        <td><span class="week-chip">W${week}</span></td>
+      </tr>`;
+    });
+  });
+
+  html += `</tbody></table></div>`;
+  results.innerHTML = html;
+}
+</script>
+</body>
+</html>
