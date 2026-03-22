@@ -87,11 +87,14 @@ main{max-width:1100px;margin:0 auto;padding:0 16px 80px}
 .field label{display:block;font-size:.58rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:5px}
 .sw{position:relative}.sw::after{content:'▾';position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none;font-size:.68rem}
 
+/* FIXED: Input fields overflowing container on iOS */
 select,input[type=month],input[type=text]{
 width:100%;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);
 color:var(--text);border-radius:var(--radius-sm);font-family:var(--font);font-size:.82rem;
-outline:none;transition:border-color var(--t),box-shadow var(--t);min-width:0;max-width:100%}
-select{appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:26px;text-overflow:ellipsis}
+outline:none;transition:border-color var(--t),box-shadow var(--t);min-width:0;max-width:100%;
+box-sizing:border-box;margin:0;-webkit-appearance:none;appearance:none;text-align:left;}
+
+select{cursor:pointer;padding-right:26px;text-overflow:ellipsis}
 select:focus,input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--glow)}
 select:disabled{opacity:.4;cursor:not-allowed}
 input[type=month]::-webkit-calendar-picker-indicator{filter:invert(.5);cursor:pointer}
@@ -173,7 +176,6 @@ input::placeholder{color:var(--text3)}
 .card:hover{background:var(--hover);border-color:var(--border2);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
 .card.today-card{border-color:rgba(15,214,138,.4);animation:tglow 3s ease-in-out infinite}
 @keyframes tglow{0%,100%{box-shadow:0 0 0 1px rgba(15,214,138,.12),0 4px 16px rgba(15,214,138,.07)}50%{box-shadow:0 0 0 1px rgba(15,214,138,.28),0 4px 24px rgba(15,214,138,.16)}}
-@media(max-width:500px){.card{grid-template-columns:1fr;gap:6px}.croom{max-width:100%}}
 .ctime{font-family:var(--mono);font-size:.77rem;font-weight:500;color:var(--accent2);padding-top:1px;word-break:break-word}
 .batch{display:inline-block;margin-top:3px;background:var(--glow);color:var(--accent);border:1px solid rgba(79,142,247,.22);padding:1px 6px;border-radius:7px;font-size:.6rem}
 .cbody{min-width:0}
@@ -184,6 +186,17 @@ input::placeholder{color:var(--text3)}
 .sem-badge{background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.22);color:var(--amber);padding:2px 7px;border-radius:8px;font-size:.64rem;font-family:var(--mono);white-space:nowrap}
 .online-tag{background:rgba(15,214,138,.1);border:1px solid rgba(15,214,138,.2);color:var(--green);padding:2px 6px;border-radius:8px;font-size:.64rem}
 .croom{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:4px 9px;font-family:var(--mono);font-size:.66rem;color:var(--accent);word-break:break-word;overflow-wrap:anywhere;align-self:start;min-width:60px;max-width:140px;line-height:1.35}
+
+/* FIXED: Ensure cards fit inside Compare View perfectly on Mobile */
+@media(max-width:500px){
+  .card{grid-template-columns:1fr;gap:6px;padding:10px}
+  .croom{max-width:100%}
+  .cmp-card { padding: 8px; }
+  .cmp-card .csubj { font-size: .75rem; }
+  .cmp-card .ctime { font-size: .7rem; }
+  .cmp-card .croom { font-size: .6rem; }
+  .col-hdr { font-size: .6rem; padding: 6px 8px; }
+}
 
 /* ═══ CALENDAR ═══ */
 .cal-outer{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -2px}
@@ -242,15 +255,15 @@ input::placeholder{color:var(--text3)}
 .freq-num{font-family:var(--mono);font-size:.7rem;color:var(--accent2);width:22px;text-align:right;flex-shrink:0}
 @media(max-width:440px){.freq-bar-wrap{width:50px}}
 
-/* ═══ COMPARE ═══ */
+/* FIXED: Compare View Layout (Fit natively on mobile) */
 .compare-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -16px;padding:0 16px}
-.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;min-width:560px}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
 .col-hdr{font-size:.68rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;padding:7px 12px;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.shared-tag{background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.22);color:var(--purple);padding:2px 7px;border-radius:8px;font-size:.62rem;font-family:var(--mono)}
+.shared-tag{background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.22);color:var(--purple);padding:1px 4px;border-radius:6px;font-size:.55rem;font-family:var(--mono)}
 
 /* Date row wrapper for aligned compare */
-.cmp-date-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;min-width:560px}
-.cmp-date-lbl{font-size:.68rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--date-text);font-weight:600;padding:5px 13px;background:var(--date-bg);border:1px solid var(--date-border);border-radius:20px;margin-bottom:8px;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.cmp-date-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;width:100%}
+.cmp-date-lbl{font-size:.68rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--date-text);font-weight:600;padding:5px 13px;background:var(--date-bg);border:1px solid var(--date-border);border-radius:20px;margin-bottom:8px;display:inline-flex;align-items:center;gap:6px;word-break:break-word}
 .cmp-date-lbl.today-lbl{background:rgba(15,214,138,.12);border-color:rgba(15,214,138,.4);color:var(--green)}
 .cmp-col{min-width:0}
 .cmp-free{background:var(--surface2);border:1px dashed var(--border);border-radius:var(--radius-sm);padding:16px 12px;text-align:center;font-size:.75rem;color:var(--text3);font-family:var(--mono)}
@@ -1014,7 +1027,7 @@ cSrc.addEventListener('click',async()=>{
 
     function mkCard(r){
       const isS=shared.has(r.strSubject);
-      return `<div class="card" style="${isS?'border-left:3px solid var(--purple);':''}">
+      return `<div class="card cmp-card" style="${isS?'border-left:3px solid var(--purple);':''}">
         <div class="ctime">${r.strClassTime||'—'}</div>
         <div class="cbody"><div class="csubj">${r.strSubject||'—'} ${isS?'<span class="shared-tag">shared</span>':''}</div>
           <div class="cmeta"><span class="meta">👤 ${r.strEmployeeName||'—'}</span></div></div>
@@ -1040,16 +1053,17 @@ cSrc.addEventListener('click',async()=>{
       rowsHTML+=`
         <div class="cmp-date-row">
           <div class="cmp-col">
-            <div class="cmp-date-lbl${isT?' today-lbl':''}">${isT?'⚡':'📅'} ${lbl} · <span style="opacity:.7">${dA.length} class${dA.length!==1?'es':''}</span></div>
+            <div class="cmp-date-lbl${isT?' today-lbl':''}">${isT?'⚡':'📅'} ${lbl}</div>
             ${colA}
           </div>
           <div class="cmp-col">
-            <div class="cmp-date-lbl${isT?' today-lbl':''}">${isT?'⚡':'📅'} ${lbl} · <span style="opacity:.7">${dB.length} class${dB.length!==1?'es':''}</span></div>
+            <div class="cmp-date-lbl${isT?' today-lbl':''}">${isT?'⚡':'📅'} ${lbl}</div>
             ${colB}
           </div>
         </div>`;
     });
 
+    // FIXED: Removed inline minimum width that forced horizontal scrolling on mobile
     document.getElementById('c-res').innerHTML=`
       <div class="stats-row" style="margin-bottom:12px">
         <div class="chip">📚 A: <b>${rA.length}</b></div>
@@ -1057,8 +1071,8 @@ cSrc.addEventListener('click',async()=>{
         <div class="chip" style="border-color:rgba(167,139,250,.25)">🔗 Shared: <b>${shared.size}</b> subjects</div>
       </div>
       <div class="compare-scroll">
-        <div style="min-width:560px">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px">
+        <div style="width:100%">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
             <div class="col-hdr" style="border-color:rgba(79,142,247,.3);color:var(--accent)">👤 ${nameA}</div>
             <div class="col-hdr" style="border-color:rgba(245,166,35,.3);color:var(--amber)">👤 ${nameB}</div>
           </div>
