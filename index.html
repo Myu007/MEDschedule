@@ -279,6 +279,11 @@ searchBtn.addEventListener('click', async () => {
       intGroupId: grpId, intYear: year, intMonth: month, strFacultyName: ''
     });
     const rows = json?.data?.data || json?.data || [];
+    // DEBUG — show raw first row
+    if (rows.length) {
+      results.innerHTML = `<pre style="background:#111;color:#0f0;padding:16px;border-radius:10px;overflow:auto;font-size:11px">${JSON.stringify(rows[0], null, 2)}</pre>`;
+      return;
+    }
     renderSchedule(rows);
   } catch(e) {
     showErr(e.message);
