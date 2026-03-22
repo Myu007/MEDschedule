@@ -302,7 +302,12 @@ function renderSchedule(rows) {
     byDate[key].push(r);
   });
 
-  const sorted = Object.keys(byDate).sort((a,b) => new Date(a)-new Date(b));
+  const sorted = Object.keys(byDate).sort((a,b) => {
+    const pa = a.split('-'), pb = b.split('-');
+    const da = new Date(`${pa[2]}-${pa[1]}-${pa[0]}`);
+    const db = new Date(`${pb[2]}-${pb[1]}-${pb[0]}`);
+    return da - db;
+  });
 
   let html = `
     <div class="results-header">
@@ -314,19 +319,24 @@ function renderSchedule(rows) {
     <tbody>`;
 
   sorted.forEach(dk => {
-    const d = new Date(dk);
-    const label = isNaN(d) ? dk : `${DN[d.getDay()]}, ${d.getDate()} ${MN[d.getMonth()]} ${d.getFullYear()}`;
+    // Date is DD-MM-YYYY — parse manually
+    let label = dk;
+    const parts = dk.split('-');
+    if (parts.length === 3) {
+      const d = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+      if (!isNaN(d)) label = `${DN[d.getDay()]}, ${d.getDate()} ${MN[d.getMonth()]} ${d.getFullYear()}`;
+    }
     html += `<tr class="day-separator"><td colspan="7">📅 ${label}</td></tr>`;
 
     byDate[dk].forEach(r => {
-      const subject = r.strSubjectName || r.SubjectName || r.strSubject || '—';
-      const stype   = r.strSubjectType || r.SubjectType || r.strClassType || '';
-      const teacher = r.strTeacherName || r.TeacherName || r.strTeacher || '—';
-      const room    = r.strRoomName || r.RoomName || r.intRoomNo || r.RoomNo || '—';
+      const subject = r.strSubjectName || r.strSubject || r.SubjectName || '—';
+      const stype   = r.strSubjectType || r.strClassType || r.SubjectType || '';
+      const teacher = r.strTeacherName || r.strTeacher || r.TeacherName || '—';
+      const room    = r.strRoomName || r.strRoom || r.intRoomNo || r.RoomName || '—';
       const num     = r.intPeriodNo || r.PeriodNo || '';
       const week    = r.intWeekNo   || r.WeekNo   || '';
-      const ts      = r.strStartTime || r.StartTime || '';
-      const te      = r.strEndTime   || r.EndTime   || '';
+      const ts      = r.strStartTime || r.strTimeFrom || r.StartTime || '';
+      const te      = r.strEndTime   || r.strTimeTo   || r.EndTime   || '';
       const time    = ts && te ? `${ts} – ${te}` : (r.strTime || r.Time || '—');
 
       html += `<tr>
