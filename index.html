@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IHSM Timetable</title>
+<title>MEDschedule</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--radius:14px;--radius-sm:10px;--t:.2s ease;--font:'Outfit',sans-serif;--mono:'JetBrains Mono',monospace}
@@ -87,7 +87,6 @@ main{max-width:1100px;margin:0 auto;padding:0 16px 80px}
 .field label{display:block;font-size:.58rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:5px}
 .sw{position:relative}.sw::after{content:'▾';position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none;font-size:.68rem}
 
-/* FIXED: Input fields overflowing container on iOS */
 select,input[type=month],input[type=text]{
 width:100%;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);
 color:var(--text);border-radius:var(--radius-sm);font-family:var(--font);font-size:.82rem;
@@ -187,7 +186,6 @@ input::placeholder{color:var(--text3)}
 .online-tag{background:rgba(15,214,138,.1);border:1px solid rgba(15,214,138,.2);color:var(--green);padding:2px 6px;border-radius:8px;font-size:.64rem}
 .croom{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:4px 9px;font-family:var(--mono);font-size:.66rem;color:var(--accent);word-break:break-word;overflow-wrap:anywhere;align-self:start;min-width:60px;max-width:140px;line-height:1.35}
 
-/* FIXED: Ensure cards fit inside Compare View perfectly on Mobile */
 @media(max-width:500px){
   .card{grid-template-columns:1fr;gap:6px;padding:10px}
   .croom{max-width:100%}
@@ -255,13 +253,11 @@ input::placeholder{color:var(--text3)}
 .freq-num{font-family:var(--mono);font-size:.7rem;color:var(--accent2);width:22px;text-align:right;flex-shrink:0}
 @media(max-width:440px){.freq-bar-wrap{width:50px}}
 
-/* FIXED: Compare View Layout (Fit natively on mobile) */
+/* Compare View Layout */
 .compare-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -16px;padding:0 16px}
 .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
 .col-hdr{font-size:.68rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;padding:7px 12px;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .shared-tag{background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.22);color:var(--purple);padding:1px 4px;border-radius:6px;font-size:.55rem;font-family:var(--mono)}
-
-/* Date row wrapper for aligned compare */
 .cmp-date-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;width:100%}
 .cmp-date-lbl{font-size:.68rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--date-text);font-weight:600;padding:5px 13px;background:var(--date-bg);border:1px solid var(--date-border);border-radius:20px;margin-bottom:8px;display:inline-flex;align-items:center;gap:6px;word-break:break-word}
 .cmp-date-lbl.today-lbl{background:rgba(15,214,138,.12);border-color:rgba(15,214,138,.4);color:var(--green)}
@@ -283,8 +279,13 @@ input::placeholder{color:var(--text3)}
 @keyframes toastin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
 @media print{header,.nav-tabs,.top-bar,.day-tabs,.stats-row,.panel,footer,.orb,body::before,.toast-wrap,.day-share-btn,.share-wrap{display:none!important}body{background:#fff;color:#000}.card{break-inside:avoid;border:1px solid #ccc;box-shadow:none}}
-footer{text-align:center;padding:20px;font-size:.65rem;color:var(--text3);font-family:var(--mono);letter-spacing:.05em;border-top:1px solid var(--border)}
-footer a{color:var(--accent);text-decoration:none}
+
+/* FOOTER */
+footer{text-align:center;padding:24px 16px;font-family:var(--font);border-top:1px solid var(--border)}
+.f-title{margin-bottom:6px;font-size:.8rem;font-weight:600;color:var(--text2);font-family:var(--mono)}
+.f-desc{opacity:0.7;font-size:.65rem;line-height:1.5;max-width:600px;margin:0 auto;color:var(--text3)}
+.f-desc a{color:var(--accent);text-decoration:none}
+.f-desc a:hover{text-decoration:underline}
 </style>
 
 </head>
@@ -306,7 +307,7 @@ footer a{color:var(--accent);text-decoration:none}
 <header>
   <div class="hi">
     <div class="logo">IH</div>
-    <div><div class="htitle">IHSM Timetable</div><div class="hsub">International School of Medicine</div></div>
+    <div><div class="htitle">MEDschedule</div><div class="hsub">International School of Medicine</div></div>
     <div class="hright">
       <div class="dot"></div>
       <div class="theme-wrap" id="themeWrap">
@@ -444,7 +445,14 @@ footer a{color:var(--accent);text-decoration:none}
 </section>
 
 </main>
-<footer>IHSM Timetable &nbsp;·&nbsp; Unofficial &nbsp;·&nbsp; Data from <a href="https://timetable.ism.edu.kg" target="_blank">timetable.ism.edu.kg</a></footer>
+
+<footer>
+  <div class="f-title">MEDschedule &nbsp;·&nbsp; Unofficial</div>
+  <div class="f-desc">
+    This site is live and in sync with the official IHSM website. It is an unofficial, faster alternative designed to load even if the original site is malfunctioning. Made to help students.<br>
+    Data sourced from <a href="https://timetable.ism.edu.kg" target="_blank">timetable.ism.edu.kg</a>.
+  </div>
+</footer>
 
 <script>
 const CAMPUS=7, ALL_SEMS=[1,2,3,4,5,6,7,8,9,10];
@@ -529,17 +537,17 @@ function announce(rows,title){
     bd[dk].forEach(r=>{m+=`  🕐 ${r.strClassTime||'?'} — ${r.strSubject||'?'}\n      👤 ${r.strEmployeeName||'?'} | 📍 ${r.strRoomName||'?'}\n`;});
     m+='\n';
   });
-  return m+'_IHSM Timetable_';
+  return m+'_MEDschedule_';
 }
 function exportICS(rows,title){
-  const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//IHSM//EN'];
+  const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//MEDschedule//EN'];
   rows.forEach(r=>{
     const day=(r.strClassDay||'').split('T')[0]?.replace(/-/g,'')||'';if(!day)return;
     const [s,e]=(r.strClassTime||'').split('-');
     const ft=t=>t?day+'T'+t.replace(':','')+'00':day+'T080000';
     L.push('BEGIN:VEVENT',`DTSTART:${ft(s)}`,`DTEND:${ft(e)}`,`SUMMARY:${r.strSubject||'Class'}`,
       `LOCATION:${r.strRoomName||''}`,`DESCRIPTION:Teacher: ${r.strEmployeeName||''}`,
-      `UID:ihsm-${day}-${(r.strSubject||'').slice(0,12)}`,'END:VEVENT');
+      `UID:medschedule-${day}-${(r.strSubject||'').slice(0,12)}`,'END:VEVENT');
   });
   L.push('END:VCALENDAR');
   dl(new Blob([L.join('\r\n')],{type:'text/calendar'}),`${title}.ics`);
@@ -918,191 +926,4 @@ tSrc.addEventListener('click',async()=>{
   tErr.style.display='none';
   document.getElementById('t-post').style.display='none';
   document.getElementById('t-res').innerHTML='<div class="empty"><div class="spinner"></div>Searching…</div>';
-  tSrc.disabled=true;tPw.style.display='block';tFill.style.width='0%';tPlbl.textContent='Loading groups…';
-  tYr=yr;tMo=mo;tCalM=false;tFreqO=false;
-
-  try{
-    const gF=ALL_SEMS.map(s=>post('/api/groups',{intCampusId:CAMPUS,intSemesterId:s}).then(j=>(j?.data?.data||j?.data||[]).map(g=>({semId:s,grpId:g.intId,grpName:g.strName}))).catch(()=>[]));
-    const ag=(await Promise.all(gF)).flat();
-    tFill.style.width='10%';tPlbl.textContent=`${ag.length} groups…`;
-    if(!ag.length)throw new Error('No groups found.');
-    let done=0;
-    const sF=ag.map(g=>post('/api/schedule',{intCampusId:CAMPUS,intSemesterId:g.semId,intGroupId:g.grpId,intYear:yr,intMonth:mo,strFacultyName:''})
-      .then(j=>{done++;tFill.style.width=`${10+(done/ag.length)*88}%`;tPlbl.textContent=`${done}/${ag.length}…`;
-        return (j?.data?.data||j?.data||[]).map(r=>({...r,_group:g.grpName,_semId:g.semId}));})
-      .catch(()=>{done++;return [];}));
-    const all=(await Promise.all(sF)).flat();
-    tFill.style.width='100%';tPlbl.textContent='Done!';setTimeout(()=>{tPw.style.display='none';},600);
-    const q=tQ.toLowerCase();
-    tMR=all.filter(r=>(r.strEmployeeName||'').toLowerCase().includes(q));
-    const seen=new Set();
-    tMR=tMR.filter(r=>{const k=`${r.strClassDate}-${r.strClassTime}-${r.strSubject}-${r._group}`;if(seen.has(k))return false;seen.add(k);return true;});
-    tRows=tMR;tDy='ALL';
-    if(!tMR.length){document.getElementById('t-res').innerHTML=`<div class="empty"><span class="ico">🔍</span>No classes for "${tQ}".</div>`;return;}
-
-    const days=new Set(tMR.map(r=>r.strClassDate)).size,groups=new Set(tMR.map(r=>r._group)).size;
-    const aName=tMR[0]?.strEmployeeName||tQ;
-    document.getElementById('t-stats').innerHTML=`<div class="chip" style="max-width:240px">👨‍🏫 <b title="${aName}">${aName}</b></div><div class="chip">📚 <b>${tMR.length}</b></div><div class="chip">📅 <b>${days}</b> days</div><div class="chip">👥 <b>${groups}</b> groups</div>`;
-    document.getElementById('t-post').style.display='block';
-
-    const title=`${aName} — ${MNF[mo-1]} ${yr}`;
-    const params={tab:'teacher',tname:tQ,month:tMth.value};
-    buildShareDD('t-sdd','t-strig',()=>tRows,()=>title,()=>tMR,()=>params);
-    window.history.replaceState({},'',shareURL(params));
-
-    const lBtn=document.getElementById('t-vlist'),cBtn=document.getElementById('t-vcal');
-    lBtn.onclick=()=>{tCalM=false;lBtn.classList.add('on');cBtn.classList.remove('on');renderT();};
-    cBtn.onclick=()=>{tCalM=true;cBtn.classList.add('on');lBtn.classList.remove('on');renderT();};
-    lBtn.classList.add('on');cBtn.classList.remove('on');
-
-    const fBtn=document.getElementById('t-vfreq');
-    fBtn.textContent='📈 Frequency';fBtn.classList.remove('on');
-    document.getElementById('t-freq-area').style.display='none';
-    fBtn.onclick=()=>{
-      tFreqO=!tFreqO;fBtn.classList.toggle('on',tFreqO);
-      fBtn.textContent=tFreqO?'📈 Hide Frequency':'📈 Frequency';
-      document.getElementById('t-freq-area').style.display=tFreqO?'block':'none';
-      if(tFreqO)renderFreq('t-freq-area',tMR);
-    };
-
-    buildTabs('t-tabs',tMR,yr,mo,tDy,day=>{tDy=day;renderT();});
-    renderT();
-  }catch(e){
-    tErr.textContent=e.message;tErr.style.display='block';
-    document.getElementById('t-res').innerHTML='<div class="empty"><span class="ico">⚠️</span>'+e.message+'</div>';
-    tPw.style.display='none';
-  }finally{tSrc.disabled=false;}
-});
-
-function renderT(){
-  if(tDy==='FREE'){renderFree('t-res',tMR,tYr,tMo);return;}
-  let rows=tMR;
-  if(tDy!=='ALL')rows=rows.filter(r=>{const d=new Date(r.strClassDay);return !isNaN(d)&&DN[d.getDay()]===tDy;});
-  tRows=rows;
-  if(tCalM)renderCal('t-res',rows,{teacherQ:tQ,showGroupSem:true});
-  else renderCards('t-res',rows,{teacherQ:tQ,showGroupSem:true});
-}
-
-// ══ COMPARE ═══════════════════════════════════════════
-const caSem=document.getElementById('ca-sem'),caGrp=document.getElementById('ca-grp');
-const cbSem=document.getElementById('cb-sem'),cbGrp=document.getElementById('cb-grp');
-const cMth=document.getElementById('c-month'),cSrc=document.getElementById('c-search'),cErr=document.getElementById('c-err');
-
-caSem.addEventListener('change',()=>{if(caSem.value)loadGroups(caSem.value,caGrp).catch(()=>{});else{caGrp.innerHTML='<option value="">—</option>';caGrp.disabled=true;}});
-cbSem.addEventListener('change',()=>{if(cbSem.value)loadGroups(cbSem.value,cbGrp).catch(()=>{});else{cbGrp.innerHTML='<option value="">—</option>';cbGrp.disabled=true;}});
-
-cSrc.addEventListener('click',async()=>{
-  const semA=parseInt(caSem.value),grpA=parseInt(caGrp.value);
-  const semB=parseInt(cbSem.value),grpB=parseInt(cbGrp.value);
-  const [yr,mo]=cMth.value.split('-').map(Number);
-  if(!grpA||!grpB||!yr){cErr.textContent='Select both groups and a month.';cErr.style.display='block';return;}
-  cErr.style.display='none';
-  document.getElementById('c-res').innerHTML='<div class="empty"><div class="spinner"></div>Comparing…</div>';
-  cSrc.disabled=true;
-
-  try{
-    const [jA,jB]=await Promise.all([
-      post('/api/schedule',{intCampusId:CAMPUS,intSemesterId:semA,intGroupId:grpA,intYear:yr,intMonth:mo,strFacultyName:''}),
-      post('/api/schedule',{intCampusId:CAMPUS,intSemesterId:semB,intGroupId:grpB,intYear:yr,intMonth:mo,strFacultyName:''})
-    ]);
-    const rA=jA?.data?.data||jA?.data||[];
-    const rB=jB?.data?.data||jB?.data||[];
-
-    // Build date-keyed maps
-    const bdA={},bdB={};
-    rA.forEach(r=>{const k=r.strClassDate||'';(bdA[k]=bdA[k]||[]).push(r);});
-    rB.forEach(r=>{const k=r.strClassDate||'';(bdB[k]=bdB[k]||[]).push(r);});
-
-    // Union of all dates, sorted chronologically
-    const allDates=[...new Set([...Object.keys(bdA),...Object.keys(bdB)])].sort((a,b)=>{
-      const da=bdA[a]?.[0]?.strClassDay||bdB[a]?.[0]?.strClassDay||'';
-      const db=bdA[b]?.[0]?.strClassDay||bdB[b]?.[0]?.strClassDay||'';
-      return new Date(da)-new Date(db);
-    });
-
-    const subjA=new Set(rA.map(r=>r.strSubject)),subjB=new Set(rB.map(r=>r.strSubject));
-    const shared=new Set([...subjA].filter(s=>subjB.has(s)));
-    const nameA=caGrp.options[caGrp.selectedIndex]?.text||'Group A';
-    const nameB=cbGrp.options[cbGrp.selectedIndex]?.text||'Group B';
-
-    function mkCard(r){
-      const isS=shared.has(r.strSubject);
-      return `<div class="card cmp-card" style="${isS?'border-left:3px solid var(--purple);':''}">
-        <div class="ctime">${r.strClassTime||'—'}</div>
-        <div class="cbody"><div class="csubj">${r.strSubject||'—'} ${isS?'<span class="shared-tag">shared</span>':''}</div>
-          <div class="cmeta"><span class="meta">👤 ${r.strEmployeeName||'—'}</span></div></div>
-        <div class="croom">${r.strRoomName||'—'}</div></div>`;
-    }
-
-    // Render date-aligned rows
-    let rowsHTML='';
-    allDates.forEach(dk=>{
-      const dA=bdA[dk]||[], dB=bdB[dk]||[];
-      const sample=(dA[0]||dB[0]);
-      const d=new Date(sample?.strClassDay||'');
-      const isT=!isNaN(d)&&d.toISOString().split('T')[0]===todayISO;
-      const lbl=!isNaN(d)?`${DN[d.getDay()]} ${d.getDate()} ${MN[d.getMonth()]}`:dk;
-
-      const colA=dA.length
-        ? dA.map(mkCard).join('')
-        : `<div class="cmp-free"><span>😴</span>No classes</div>`;
-      const colB=dB.length
-        ? dB.map(mkCard).join('')
-        : `<div class="cmp-free"><span>😴</span>No classes</div>`;
-
-      rowsHTML+=`
-        <div class="cmp-date-row">
-          <div class="cmp-col">
-            <div class="cmp-date-lbl${isT?' today-lbl':''}">${isT?'⚡':'📅'} ${lbl}</div>
-            ${colA}
-          </div>
-          <div class="cmp-col">
-            <div class="cmp-date-lbl${isT?' today-lbl':''}">${isT?'⚡':'📅'} ${lbl}</div>
-            ${colB}
-          </div>
-        </div>`;
-    });
-
-    // FIXED: Removed inline minimum width that forced horizontal scrolling on mobile
-    document.getElementById('c-res').innerHTML=`
-      <div class="stats-row" style="margin-bottom:12px">
-        <div class="chip">📚 A: <b>${rA.length}</b></div>
-        <div class="chip">📚 B: <b>${rB.length}</b></div>
-        <div class="chip" style="border-color:rgba(167,139,250,.25)">🔗 Shared: <b>${shared.size}</b> subjects</div>
-      </div>
-      <div class="compare-scroll">
-        <div style="width:100%">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
-            <div class="col-hdr" style="border-color:rgba(79,142,247,.3);color:var(--accent)">👤 ${nameA}</div>
-            <div class="col-hdr" style="border-color:rgba(245,166,35,.3);color:var(--amber)">👤 ${nameB}</div>
-          </div>
-          ${rowsHTML}
-        </div>
-      </div>`;
-  }catch(e){
-    cErr.textContent=e.message;cErr.style.display='block';
-    document.getElementById('c-res').innerHTML='<div class="empty"><span class="ico">⚠️</span>'+e.message+'</div>';
-  }finally{cSrc.disabled=false;}
-});
-
-// ══ URL PARAMS ════════════════════════════════════════
-(async function initURL(){
-  const p=new URLSearchParams(window.location.search);
-  const tab=p.get('tab'),sem=p.get('sem'),grp=p.get('grp'),month=p.get('month'),tname=p.get('tname');
-  if(!tab)return;
-  const tabBtn=document.querySelector(`.nav-tab[data-tab="${tab}"]`);
-  if(tabBtn)tabBtn.click();
-  if(tab==='student'&&sem&&grp&&month){
-    const sE=document.getElementById('s-sem'),gE=document.getElementById('s-grp'),mE=document.getElementById('s-month');
-    sE.value=sem;await loadGroups(sem,gE).catch(()=>{});gE.value=grp;mE.value=month;
-    if(gE.value)document.getElementById('s-search').click();
-  }
-  if(tab==='teacher'&&tname&&month){
-    document.getElementById('t-name').value=tname;document.getElementById('t-month').value=month;
-    document.getElementById('t-search').click();
-  }
-})();
-</script>
-
-</body>
-</html>
+  tSrc
