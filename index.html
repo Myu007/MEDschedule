@@ -6,197 +6,260 @@
 <title>IHSM Timetable</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root { --radius:14px; --radius-sm:8px; --t:.2s ease; --font:'Outfit',sans-serif; --mono:'JetBrains Mono',monospace; }
+:root{--radius:14px;--radius-sm:8px;--t:.2s ease;--font:'Outfit',sans-serif;--mono:'JetBrains Mono',monospace}
 
-[data-theme="dark"] {
-  --bg:#080c14; --bg2:#0d1220; --surface:#111827; --surface2:#162032; --surface3:#1c2a40;
-  --border:#1e2d45; --border2:#243652; --text:#e8f0fe; --text2:#94a3b8; --text3:#4d6080;
-  --accent:#3b82f6; --glow:rgba(59,130,246,.2); --accent2:#06b6d4;
-  --green:#10b981; --shadow:0 4px 24px rgba(0,0,0,.4); --shadow-sm:0 2px 8px rgba(0,0,0,.3);
-  --card-hover:rgba(59,130,246,.05);
+[data-theme="dark"]{
+  --bg:#080c14;--surface:#111827;--surface2:#162032;--surface3:#1c2a40;
+  --border:#1e2d45;--border2:#243652;--text:#e8f0fe;--text2:#94a3b8;--text3:#4d6080;
+  --accent:#3b82f6;--glow:rgba(59,130,246,.2);--accent2:#06b6d4;--amber:#f59e0b;
+  --green:#10b981;--shadow:0 4px 24px rgba(0,0,0,.4);--shadow-sm:0 2px 8px rgba(0,0,0,.3);
+  --hover:rgba(59,130,246,.05);
 }
-[data-theme="light"] {
-  --bg:#f0f4ff; --bg2:#e8eeff; --surface:#fff; --surface2:#f5f7ff; --surface3:#edf0ff;
-  --border:#dde3f0; --border2:#c8d0e8; --text:#0f172a; --text2:#475569; --text3:#94a3b8;
-  --accent:#2563eb; --glow:rgba(37,99,235,.12); --accent2:#0891b2;
-  --green:#059669; --shadow:0 4px 24px rgba(0,0,0,.08); --shadow-sm:0 2px 8px rgba(0,0,0,.06);
-  --card-hover:rgba(37,99,235,.04);
+[data-theme="light"]{
+  --bg:#f0f4ff;--surface:#fff;--surface2:#f5f7ff;--surface3:#edf0ff;
+  --border:#dde3f0;--border2:#c8d0e8;--text:#0f172a;--text2:#475569;--text3:#94a3b8;
+  --accent:#2563eb;--glow:rgba(37,99,235,.12);--accent2:#0891b2;--amber:#d97706;
+  --green:#059669;--shadow:0 4px 24px rgba(0,0,0,.08);--shadow-sm:0 2px 8px rgba(0,0,0,.06);
+  --hover:rgba(37,99,235,.04);
 }
 
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;transition:background var(--t),color var(--t)}
 
-/* HEADER */
+/* ── HEADER ── */
 header{position:sticky;top:0;z-index:200;background:var(--surface);border-bottom:1px solid var(--border);backdrop-filter:blur(16px);box-shadow:var(--shadow-sm)}
-.header-inner{max-width:1100px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;gap:12px}
+.hi{max-width:1100px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;gap:12px}
 .logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;flex-shrink:0;box-shadow:0 0 16px var(--glow)}
-.header-title{font-size:.95rem;font-weight:600}
-.header-sub{font-size:.72rem;color:var(--text2)}
-.header-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.htitle{font-size:.95rem;font-weight:600}
+.hsub{font-size:.72rem;color:var(--text2)}
+.hright{margin-left:auto;display:flex;align-items:center;gap:10px}
 .theme-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:var(--surface2);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all var(--t)}
-.theme-btn:hover{border-color:var(--accent);color:var(--accent)}
+.theme-btn:hover{border-color:var(--accent)}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-/* MAIN */
-main{max-width:1100px;margin:0 auto;padding:24px 20px 60px}
+/* ── NAV TABS ── */
+.nav-tabs{max-width:1100px;margin:0 auto;padding:16px 20px 0;display:flex;gap:8px}
+.nav-tab{padding:8px 20px;border-radius:var(--radius-sm) var(--radius-sm) 0 0;border:1px solid var(--border);border-bottom:none;background:var(--surface2);color:var(--text2);font-family:var(--font);font-size:.83rem;font-weight:500;cursor:pointer;transition:all var(--t)}
+.nav-tab.active{background:var(--surface);color:var(--text);border-color:var(--border);position:relative}
+.nav-tab.active::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:var(--surface)}
+.nav-tab:hover:not(.active){color:var(--accent)}
 
-/* PANEL */
-.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:20px;box-shadow:var(--shadow-sm)}
-.panel-label{font-size:.63rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;color:var(--text3);margin-bottom:14px}
+/* ── MAIN ── */
+main{max-width:1100px;margin:0 auto;padding:0 20px 60px}
 
+/* ── PANEL ── */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:0 var(--radius) var(--radius) var(--radius);padding:20px;margin-bottom:16px;box-shadow:var(--shadow-sm)}
+.section{display:none}
+.section.active{display:block}
+.plabel{font-size:.62rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;color:var(--text3);margin-bottom:14px}
+
+/* ── FORM CONTROLS ── */
+.grid3{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end}
 .grid4{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end}
-@media(max-width:700px){.grid4{grid-template-columns:1fr 1fr}.btn-wrap{grid-column:1/-1}}
-@media(max-width:420px){.grid4{grid-template-columns:1fr}}
+@media(max-width:700px){
+  .grid4{grid-template-columns:1fr 1fr}
+  .grid3{grid-template-columns:1fr 1fr}
+  .bw{grid-column:1/-1}
+}
+@media(max-width:420px){.grid4,.grid3{grid-template-columns:1fr}}
 
-.field label{display:block;font-size:.63rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:6px}
-
-select,input[type=month]{width:100%;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:var(--radius-sm);font-family:var(--font);font-size:.83rem;appearance:none;-webkit-appearance:none;cursor:pointer;outline:none;transition:border-color var(--t),box-shadow var(--t)}
-select:focus,input[type=month]:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--glow)}
-select:disabled{opacity:.4;cursor:not-allowed}
+.field label{display:block;font-size:.62rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:6px}
 .sw{position:relative}
 .sw::after{content:'▾';position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none;font-size:.7rem}
+
+select,input[type=month],input[type=text]{
+  width:100%;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);
+  color:var(--text);border-radius:var(--radius-sm);font-family:var(--font);font-size:.83rem;
+  outline:none;transition:border-color var(--t),box-shadow var(--t)
+}
+select{appearance:none;-webkit-appearance:none;cursor:pointer}
+select:focus,input[type=month]:focus,input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--glow)}
+select:disabled{opacity:.4;cursor:not-allowed}
 input[type=month]::-webkit-calendar-picker-indicator{filter:invert(.5);cursor:pointer}
-
-.teacher-row{margin-top:10px;display:flex;gap:8px;align-items:center}
-.ti-wrap{position:relative;flex:1}
-.ti-wrap .si{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px;pointer-events:none}
-input[type=text]{width:100%;padding:10px 12px 10px 32px;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:var(--radius-sm);font-family:var(--font);font-size:.83rem;outline:none;transition:border-color var(--t),box-shadow var(--t)}
-input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--glow)}
 input[type=text]::placeholder{color:var(--text3)}
-.clear-btn{background:none;border:none;cursor:pointer;color:var(--text3);padding:4px 6px;font-size:15px;display:none;transition:color var(--t);border-radius:6px}
-.clear-btn:hover{color:#ef4444}
 
-.btn-search{width:100%;padding:10px 20px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;border-radius:var(--radius-sm);font-family:var(--font);font-size:.88rem;font-weight:600;cursor:pointer;transition:opacity var(--t),transform .1s;white-space:nowrap;box-shadow:0 4px 12px var(--glow)}
-.btn-search:hover{opacity:.88}
-.btn-search:active{transform:scale(.97)}
-.btn-search:disabled{opacity:.4;cursor:not-allowed;transform:none}
+/* teacher name input with icon */
+.inp-wrap{position:relative}
+.inp-wrap .ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px;pointer-events:none}
+.inp-wrap input{padding-left:32px}
 
-/* ERROR */
-.err{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);color:#fca5a5;padding:10px 14px;border-radius:var(--radius-sm);font-size:.8rem;margin-bottom:16px;display:none}
+.btn{width:100%;padding:10px 20px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;border-radius:var(--radius-sm);font-family:var(--font);font-size:.88rem;font-weight:600;cursor:pointer;transition:opacity var(--t),transform .1s;white-space:nowrap;box-shadow:0 4px 12px var(--glow)}
+.btn:hover{opacity:.88}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
 
-/* STATS + TABS */
-.stats-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
-.chip{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-size:.72rem;font-family:var(--mono);color:var(--text2);display:flex;align-items:center;gap:5px}
+.btn-amber{background:linear-gradient(135deg,var(--amber),#f97316);box-shadow:0 4px 12px rgba(245,158,11,.25)}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap{margin-top:12px;display:none}
+.progress-bar{height:3px;background:var(--surface2);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;transition:width .3s ease;width:0%}
+.progress-label{font-size:.68rem;font-family:var(--mono);color:var(--text3);margin-top:5px}
+
+/* ── ERROR ── */
+.err{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);color:#fca5a5;padding:10px 14px;border-radius:var(--radius-sm);font-size:.8rem;margin-bottom:14px;display:none}
+
+/* ── STATS + FILTER TABS ── */
+.stats-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.chip{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:.7rem;font-family:var(--mono);color:var(--text2);display:flex;align-items:center;gap:5px}
 .chip b{color:var(--accent2)}
 
-.day-tabs{display:flex;gap:6px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.day-tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
 .day-tabs::-webkit-scrollbar{display:none}
-.day-tab{flex-shrink:0;padding:6px 14px;background:var(--surface);border:1px solid var(--border);color:var(--text2);border-radius:20px;font-size:.73rem;font-family:var(--mono);cursor:pointer;transition:all var(--t);white-space:nowrap}
-.day-tab:hover{border-color:var(--accent);color:var(--accent)}
-.day-tab.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 4px 12px var(--glow)}
+.dtab{flex-shrink:0;padding:5px 12px;background:var(--surface);border:1px solid var(--border);color:var(--text2);border-radius:20px;font-size:.72rem;font-family:var(--mono);cursor:pointer;transition:all var(--t)}
+.dtab:hover{border-color:var(--accent);color:var(--accent)}
+.dtab.on{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 4px 12px var(--glow)}
 
-/* CARDS */
-.day-group{margin-bottom:20px}
-.day-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.day-lbl{font-size:.7rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--accent);font-weight:500}
-.day-line{flex:1;height:1px;background:var(--border)}
-.day-cnt{font-size:.63rem;font-family:var(--mono);color:var(--text3);background:var(--surface2);border:1px solid var(--border);padding:2px 8px;border-radius:10px}
+/* ── CARDS ── */
+.day-group{margin-bottom:18px}
+.dh{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.dlbl{font-size:.68rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--accent);font-weight:500}
+.dline{flex:1;height:1px;background:var(--border)}
+.dcnt{font-size:.62rem;font-family:var(--mono);color:var(--text3);background:var(--surface2);border:1px solid var(--border);padding:2px 7px;border-radius:10px}
 
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:8px;display:grid;grid-template-columns:96px 1fr auto;gap:12px;align-items:start;transition:background var(--t),border-color var(--t),transform .15s;cursor:default}
-.card:hover{background:var(--card-hover);border-color:var(--border2);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
-.card.hday{opacity:.4}
-@media(max-width:560px){.card{grid-template-columns:1fr;gap:8px}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin-bottom:7px;display:grid;grid-template-columns:96px 1fr auto;gap:12px;align-items:start;transition:background var(--t),border-color var(--t),transform .15s}
+.card:hover{background:var(--hover);border-color:var(--border2);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+@media(max-width:540px){.card{grid-template-columns:1fr;gap:6px}}
 
-.c-time{font-family:var(--mono);font-size:.8rem;font-weight:500;color:var(--accent2);white-space:nowrap;padding-top:2px}
-.batch-tag{display:inline-block;margin-top:4px;background:var(--glow);color:var(--accent);border:1px solid rgba(59,130,246,.2);padding:1px 7px;border-radius:10px;font-size:.63rem}
+/* teacher search cards get group badge */
+.card .grp-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.22);color:var(--accent2);padding:2px 8px;border-radius:10px;font-size:.67rem;font-family:var(--mono)}
 
-.c-subject{font-size:.9rem;font-weight:600;color:var(--text);margin-bottom:5px;line-height:1.3}
-.c-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.meta{display:flex;align-items:center;gap:4px;font-size:.73rem;color:var(--text2)}
+.ctime{font-family:var(--mono);font-size:.79rem;font-weight:500;color:var(--accent2);white-space:nowrap;padding-top:2px}
+.batch{display:inline-block;margin-top:3px;background:var(--glow);color:var(--accent);border:1px solid rgba(59,130,246,.2);padding:1px 6px;border-radius:8px;font-size:.62rem}
+.csubj{font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:4px;line-height:1.3}
+.cmeta{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.meta{font-size:.72rem;color:var(--text2);display:flex;align-items:center;gap:4px}
+.croom{flex-shrink:0;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:4px 10px;font-family:var(--mono);font-size:.7rem;color:var(--accent);white-space:nowrap;align-self:start}
+.online-tag{display:inline-flex;align-items:center;gap:3px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.22);color:var(--green);padding:2px 7px;border-radius:9px;font-size:.67rem}
 
-.c-room{flex-shrink:0;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:4px 10px;font-family:var(--mono);font-size:.72rem;color:var(--accent);white-space:nowrap;text-align:center;align-self:start}
-
-.online-tag{display:inline-flex;align-items:center;gap:4px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:var(--green);padding:2px 8px;border-radius:10px;font-size:.67rem}
-
-/* EMPTY / SPINNER */
-.empty{text-align:center;padding:60px 20px;color:var(--text3);font-size:.85rem}
-.empty .ico{font-size:3rem;margin-bottom:12px;opacity:.4;display:block}
-.spinner{width:28px;height:28px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px}
+/* ── EMPTY / LOADER ── */
+.empty{text-align:center;padding:50px 20px;color:var(--text3);font-size:.85rem}
+.empty .ico{font-size:2.8rem;margin-bottom:12px;opacity:.4;display:block}
+.spinner{width:26px;height:26px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
 @keyframes spin{to{transform:rotate(360deg)}}
-
 .hl{background:rgba(251,191,36,.25);border-radius:3px;padding:0 2px}
 
-footer{text-align:center;padding:24px 20px;font-size:.68rem;color:var(--text3);font-family:var(--mono);letter-spacing:.06em;border-top:1px solid var(--border)}
+footer{text-align:center;padding:22px 20px;font-size:.67rem;color:var(--text3);font-family:var(--mono);letter-spacing:.05em;border-top:1px solid var(--border);margin-top:20px}
 footer a{color:var(--accent);text-decoration:none}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="header-inner">
+  <div class="hi">
     <div class="logo">IH</div>
     <div>
-      <div class="header-title">IHSM Timetable</div>
-      <div class="header-sub">International School of Medicine</div>
+      <div class="htitle">IHSM Timetable</div>
+      <div class="hsub">International School of Medicine</div>
     </div>
-    <div class="header-right">
-      <div class="dot" title="Live"></div>
+    <div class="hright">
+      <div class="dot"></div>
       <button class="theme-btn" id="themeBtn">🌙</button>
     </div>
   </div>
 </header>
 
+<!-- NAV TABS -->
+<div class="nav-tabs">
+  <button class="nav-tab active" data-tab="student">👤 Student</button>
+  <button class="nav-tab" data-tab="teacher">👨‍🏫 Teacher</button>
+</div>
+
 <main>
-  <div class="panel">
-    <div class="panel-label">Find Schedule</div>
-    <div class="grid4">
-      <div class="field">
-        <label>Semester</label>
-        <div class="sw">
-          <select id="semSel">
-            <option value="">— Semester —</option>
-            <option value="1">1st Course · 1st Sem</option>
-            <option value="2">1st Course · 2nd Sem</option>
-            <option value="3">2nd Course · 3rd Sem</option>
-            <option value="4">2nd Course · 4th Sem</option>
-            <option value="5">3rd Course · 5th Sem</option>
-            <option value="6">3rd Course · 6th Sem</option>
-            <option value="7">4th Course · 7th Sem</option>
-            <option value="8">4th Course · 8th Sem</option>
-            <option value="9">5th Course · 9th Sem</option>
-            <option value="10">5th Course · 10th Sem</option>
-          </select>
+
+  <!-- ══════════ STUDENT SECTION ══════════ -->
+  <section class="section active" id="sec-student">
+    <div class="panel">
+      <div class="plabel">Student Schedule</div>
+      <div class="grid4">
+        <div class="field">
+          <label>Semester</label>
+          <div class="sw">
+            <select id="s-sem">
+              <option value="">— Semester —</option>
+              <option value="1">1st Course · 1st Sem</option>
+              <option value="2">1st Course · 2nd Sem</option>
+              <option value="3">2nd Course · 3rd Sem</option>
+              <option value="4">2nd Course · 4th Sem</option>
+              <option value="5">3rd Course · 5th Sem</option>
+              <option value="6">3rd Course · 6th Sem</option>
+              <option value="7">4th Course · 7th Sem</option>
+              <option value="8">4th Course · 8th Sem</option>
+              <option value="9">5th Course · 9th Sem</option>
+              <option value="10">5th Course · 10th Sem</option>
+            </select>
+          </div>
         </div>
-      </div>
-      <div class="field">
-        <label>Group</label>
-        <div class="sw">
-          <select id="grpSel" disabled>
-            <option value="">— Pick semester first —</option>
-          </select>
+        <div class="field">
+          <label>Group</label>
+          <div class="sw">
+            <select id="s-grp" disabled>
+              <option value="">— Pick semester —</option>
+            </select>
+          </div>
         </div>
-      </div>
-      <div class="field">
-        <label>Month</label>
-        <input type="month" id="monthInp" />
-      </div>
-      <div class="field btn-wrap">
-        <label style="visibility:hidden">Go</label>
-        <button class="btn-search" id="searchBtn" disabled>Search</button>
+        <div class="field">
+          <label>Month</label>
+          <input type="month" id="s-month" />
+        </div>
+        <div class="field bw">
+          <label style="visibility:hidden">x</label>
+          <button class="btn" id="s-search" disabled>Search</button>
+        </div>
       </div>
     </div>
 
-    <div class="teacher-row">
-      <div class="ti-wrap">
-        <span class="si">🔍</span>
-        <input type="text" id="teacherInp" placeholder="Filter by teacher name…" autocomplete="off" />
-      </div>
-      <button class="clear-btn" id="clearBtn">✕</button>
+    <div class="err" id="s-err"></div>
+
+    <div id="s-filters" style="display:none">
+      <div class="stats-row" id="s-stats"></div>
+      <div class="day-tabs" id="s-days"></div>
     </div>
-  </div>
+    <div id="s-results">
+      <div class="empty"><span class="ico">📅</span>Choose semester, group &amp; month</div>
+    </div>
+  </section>
 
-  <div class="err" id="errBar"></div>
+  <!-- ══════════ TEACHER SECTION ══════════ -->
+  <section class="section" id="sec-teacher">
+    <div class="panel">
+      <div class="plabel">Teacher Schedule — searches across all groups</div>
+      <div class="grid3">
+        <div class="field">
+          <label>Teacher Name</label>
+          <div class="inp-wrap">
+            <span class="ico">👨‍🏫</span>
+            <input type="text" id="t-name" placeholder="e.g. Kim Tatyana" autocomplete="off" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Month</label>
+          <input type="month" id="t-month" />
+        </div>
+        <div class="field bw">
+          <label style="visibility:hidden">x</label>
+          <button class="btn btn-amber" id="t-search">Search</button>
+        </div>
+      </div>
+      <div class="progress-wrap" id="t-progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="t-fill"></div></div>
+        <div class="progress-label" id="t-plabel">Loading groups…</div>
+      </div>
+    </div>
 
-  <div id="filtersArea" style="display:none">
-    <div class="stats-row" id="statsRow"></div>
-    <div class="day-tabs" id="dayTabs"></div>
-  </div>
+    <div class="err" id="t-err"></div>
 
-  <div id="results">
-    <div class="empty"><span class="ico">📅</span>Select a semester &amp; group, then hit Search</div>
-  </div>
+    <div id="t-filters" style="display:none">
+      <div class="stats-row" id="t-stats"></div>
+      <div class="day-tabs" id="t-days"></div>
+    </div>
+    <div id="t-results">
+      <div class="empty"><span class="ico">👨‍🏫</span>Enter a teacher name and pick a month</div>
+    </div>
+  </section>
+
 </main>
 
 <footer>
@@ -205,32 +268,15 @@ footer a{color:var(--accent);text-decoration:none}
 </footer>
 
 <script>
-let allRows = [], activeDay = 'ALL', teacherQ = '';
 const CAMPUS = 7;
 const DN = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const ALL_SEMS = [1,2,3,4,5,6,7,8,9,10];
 
-const $  = id => document.getElementById(id);
-const semSel    = $('semSel');
-const grpSel    = $('grpSel');
-const monthInp  = $('monthInp');
-const searchBtn = $('searchBtn');
-const results   = $('results');
-const errBar    = $('errBar');
-const filtersArea = $('filtersArea');
-const statsRow  = $('statsRow');
-const dayTabs   = $('dayTabs');
-const teacherInp= $('teacherInp');
-const clearBtn  = $('clearBtn');
-const themeBtn  = $('themeBtn');
-
-// Default month
-const now = new Date();
-monthInp.value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-
-// Theme
+// ── THEME ──────────────────────────────────────────────────
 let theme = localStorage.getItem('ihsm-theme') || 'dark';
 document.documentElement.setAttribute('data-theme', theme);
+const themeBtn = document.getElementById('themeBtn');
 themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
 themeBtn.onclick = () => {
   theme = theme === 'dark' ? 'light' : 'dark';
@@ -239,111 +285,27 @@ themeBtn.onclick = () => {
   localStorage.setItem('ihsm-theme', theme);
 };
 
-// Helpers
-const showErr = m => { errBar.textContent = m; errBar.style.display = 'block'; };
-const hideErr = () => { errBar.style.display = 'none'; };
-const loading = m => { results.innerHTML = `<div class="empty"><div class="spinner"></div>${m}</div>`; };
+// ── NAV TABS ───────────────────────────────────────────────
+document.querySelectorAll('.nav-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('sec-' + btn.dataset.tab).classList.add('active');
+  });
+});
 
+// ── DEFAULTS ──────────────────────────────────────────────
+const now = new Date();
+const monthVal = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+document.getElementById('s-month').value = monthVal;
+document.getElementById('t-month').value = monthVal;
+
+// ── HELPERS ───────────────────────────────────────────────
 async function post(path, body) {
   const r = await fetch(path, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
   if (!r.ok) throw new Error(`Error ${r.status}`);
   return r.json();
-}
-
-// Semester → groups
-semSel.addEventListener('change', async () => {
-  const id = parseInt(semSel.value);
-  grpSel.disabled = true;
-  grpSel.innerHTML = '<option>Loading…</option>';
-  searchBtn.disabled = true;
-  hideErr();
-  if (!id) { grpSel.innerHTML = '<option value="">— Pick semester first —</option>'; return; }
-  try {
-    const j = await post('/api/groups', { intCampusId:CAMPUS, intSemesterId:id });
-    const g = j?.data?.data || j?.data || [];
-    grpSel.innerHTML = '<option value="">— Choose group —</option>';
-    g.forEach(x => {
-      const o = document.createElement('option');
-      o.value = x.intId; o.textContent = `Group ${x.strName}`;
-      grpSel.appendChild(o);
-    });
-    grpSel.disabled = false;
-  } catch(e) {
-    grpSel.innerHTML = '<option value="">— Error —</option>';
-    showErr(e.message);
-  }
-});
-
-grpSel.addEventListener('change', () => { searchBtn.disabled = !grpSel.value; });
-
-// Search
-searchBtn.addEventListener('click', async () => {
-  const semId = parseInt(semSel.value);
-  const grpId = parseInt(grpSel.value);
-  const [yr, mo] = monthInp.value.split('-').map(Number);
-  if (!grpId || !yr) return;
-
-  hideErr(); loading('Fetching schedule…'); searchBtn.disabled = true;
-  filtersArea.style.display = 'none';
-  teacherInp.value = ''; teacherQ = ''; clearBtn.style.display = 'none';
-
-  try {
-    const j = await post('/api/schedule', {
-      intCampusId:CAMPUS, intSemesterId:semId,
-      intGroupId:grpId, intYear:yr, intMonth:mo, strFacultyName:''
-    });
-    allRows = j?.data?.data || j?.data || [];
-    activeDay = 'ALL';
-    buildFilters();
-    render();
-  } catch(e) {
-    showErr(e.message);
-    results.innerHTML = `<div class="empty"><span class="ico">⚠️</span>${e.message}</div>`;
-  } finally { searchBtn.disabled = false; }
-});
-
-// Teacher filter
-teacherInp.addEventListener('input', () => {
-  teacherQ = teacherInp.value.trim().toLowerCase();
-  clearBtn.style.display = teacherQ ? 'block' : 'none';
-  if (allRows.length) render();
-});
-clearBtn.onclick = () => {
-  teacherInp.value = ''; teacherQ = '';
-  clearBtn.style.display = 'none';
-  if (allRows.length) render();
-};
-
-function buildFilters() {
-  if (!allRows.length) { filtersArea.style.display = 'none'; return; }
-  filtersArea.style.display = 'block';
-
-  const days = new Set(allRows.map(r => r.strClassDate)).size;
-  const teachers = new Set(allRows.map(r => r.strEmployeeName).filter(Boolean)).size;
-  statsRow.innerHTML = `
-    <div class="chip">📚 <b>${allRows.length}</b> classes</div>
-    <div class="chip">📅 <b>${days}</b> days</div>
-    <div class="chip">👨‍🏫 <b>${teachers}</b> teachers</div>`;
-
-  const daySet = ['ALL'];
-  allRows.forEach(r => {
-    const d = new Date(r.strClassDay);
-    if (!isNaN(d)) { const n = DN[d.getDay()]; if (!daySet.includes(n)) daySet.push(n); }
-  });
-
-  dayTabs.innerHTML = '';
-  daySet.forEach(day => {
-    const btn = document.createElement('button');
-    btn.className = 'day-tab' + (day === activeDay ? ' active' : '');
-    btn.textContent = day === 'ALL' ? '📋 All' : day;
-    btn.onclick = () => {
-      activeDay = day;
-      document.querySelectorAll('.day-tab').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      render();
-    };
-    dayTabs.appendChild(btn);
-  });
 }
 
 function hl(txt, q) {
@@ -351,49 +313,222 @@ function hl(txt, q) {
   return txt.replace(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'), '<span class="hl">$1</span>');
 }
 
-function render() {
-  let rows = allRows;
-  if (teacherQ) rows = rows.filter(r => (r.strEmployeeName||'').toLowerCase().includes(teacherQ));
-  if (activeDay !== 'ALL') rows = rows.filter(r => { const d = new Date(r.strClassDay); return !isNaN(d) && DN[d.getDay()] === activeDay; });
-
-  if (!rows.length) {
-    results.innerHTML = `<div class="empty"><span class="ico">🔍</span>No classes match your filter.</div>`;
-    return;
-  }
+function renderCards(containerId, rows, teacherQ = '', showGroup = false) {
+  const el = document.getElementById(containerId);
+  if (!rows.length) { el.innerHTML = `<div class="empty"><span class="ico">🔍</span>No classes found.</div>`; return; }
 
   const byDate = {};
-  rows.forEach(r => { const k = r.strClassDate||''; (byDate[k] = byDate[k]||[]).push(r); });
+  rows.forEach(r => { const k = r.strClassDate||''; (byDate[k]=byDate[k]||[]).push(r); });
   const sorted = Object.keys(byDate).sort((a,b) => new Date(byDate[a][0]?.strClassDay) - new Date(byDate[b][0]?.strClassDay));
 
   let html = '';
   sorted.forEach(dk => {
-    const d = new Date(byDate[dk][0]?.strClassDay || '');
+    const d = new Date(byDate[dk][0]?.strClassDay||'');
     const lbl = !isNaN(d) ? `${DN[d.getDay()]}, ${d.getDate()} ${MN[d.getMonth()]} ${d.getFullYear()}` : dk;
-
-    html += `<div class="day-group">
-      <div class="day-header">
-        <span class="day-lbl">📅 ${lbl}</span>
-        <span class="day-line"></span>
-        <span class="day-cnt">${byDate[dk].length}</span>
-      </div>`;
-
+    html += `<div class="day-group"><div class="dh"><span class="dlbl">📅 ${lbl}</span><span class="dline"></span><span class="dcnt">${byDate[dk].length}</span></div>`;
     byDate[dk].forEach(r => {
-      html += `<div class="card${r.intIsHoliday===1?' hday':''}">
-        <div class="c-time">${r.strClassTime||'—'}${r.strBatch?`<div><span class="batch-tag">B${r.strBatch}</span></div>`:''}</div>
+      const teacherDisplay = teacherQ ? hl(r.strEmployeeName||'—', teacherQ) : (r.strEmployeeName||'—');
+      html += `<div class="card">
+        <div class="ctime">${r.strClassTime||'—'}${r.strBatch?`<div><span class="batch">B${r.strBatch}</span></div>`:''}</div>
         <div>
-          <div class="c-subject">${r.strSubject||'—'}</div>
-          <div class="c-meta">
-            <span class="meta">👤 ${hl(r.strEmployeeName||'—', teacherQ)}</span>
+          <div class="csubj">${r.strSubject||'—'}</div>
+          <div class="cmeta">
+            ${showGroup ? `<span class="grp-badge">👥 Group ${r._group||''}</span>` : ''}
+            <span class="meta">👤 ${teacherDisplay}</span>
             ${r.intOnlineClass===1?'<span class="online-tag">🌐 Online</span>':''}
           </div>
         </div>
-        <div class="c-room">${r.strRoomName||'—'}</div>
+        <div class="croom">${r.strRoomName||'—'}</div>
       </div>`;
     });
     html += `</div>`;
   });
+  el.innerHTML = html;
+}
 
-  results.innerHTML = html;
+function buildDayTabs(tabsId, rows, activeDay, onSelect) {
+  const el = document.getElementById(tabsId);
+  const daySet = ['ALL'];
+  rows.forEach(r => { const d = new Date(r.strClassDay); if (!isNaN(d)) { const n = DN[d.getDay()]; if (!daySet.includes(n)) daySet.push(n); } });
+  el.innerHTML = '';
+  daySet.forEach(day => {
+    const b = document.createElement('button');
+    b.className = 'dtab' + (day === activeDay ? ' on' : '');
+    b.textContent = day === 'ALL' ? '📋 All' : day;
+    b.onclick = () => {
+      el.querySelectorAll('.dtab').forEach(x => x.classList.remove('on'));
+      b.classList.add('on');
+      onSelect(day);
+    };
+    el.appendChild(b);
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+// STUDENT SECTION
+// ══════════════════════════════════════════════════════════
+let sRows = [], sDay = 'ALL';
+
+const sSem    = document.getElementById('s-sem');
+const sGrp    = document.getElementById('s-grp');
+const sMonth  = document.getElementById('s-month');
+const sSearch = document.getElementById('s-search');
+const sErr    = document.getElementById('s-err');
+const sFilters= document.getElementById('s-filters');
+const sStats  = document.getElementById('s-stats');
+
+sSem.addEventListener('change', async () => {
+  const id = parseInt(sSem.value);
+  sGrp.disabled = true; sGrp.innerHTML = '<option>Loading…</option>'; sSearch.disabled = true;
+  sErr.style.display = 'none';
+  if (!id) { sGrp.innerHTML = '<option value="">— Pick semester —</option>'; return; }
+  try {
+    const j = await post('/api/groups', { intCampusId:CAMPUS, intSemesterId:id });
+    const g = j?.data?.data || j?.data || [];
+    sGrp.innerHTML = '<option value="">— Choose group —</option>';
+    g.forEach(x => { const o = document.createElement('option'); o.value = x.intId; o.textContent = `Group ${x.strName}`; sGrp.appendChild(o); });
+    sGrp.disabled = false;
+  } catch(e) { sGrp.innerHTML = '<option value="">— Error —</option>'; sErr.textContent = e.message; sErr.style.display = 'block'; }
+});
+
+sGrp.addEventListener('change', () => { sSearch.disabled = !sGrp.value; });
+
+sSearch.addEventListener('click', async () => {
+  const semId = parseInt(sSem.value), grpId = parseInt(sGrp.value);
+  const [yr, mo] = sMonth.value.split('-').map(Number);
+  if (!grpId || !yr) return;
+  sErr.style.display = 'none';
+  document.getElementById('s-results').innerHTML = `<div class="empty"><div class="spinner"></div>Fetching schedule…</div>`;
+  sSearch.disabled = true; sFilters.style.display = 'none';
+
+  try {
+    const j = await post('/api/schedule', { intCampusId:CAMPUS, intSemesterId:semId, intGroupId:grpId, intYear:yr, intMonth:mo, strFacultyName:'' });
+    sRows = j?.data?.data || j?.data || [];
+    sDay = 'ALL';
+
+    if (!sRows.length) { document.getElementById('s-results').innerHTML = `<div class="empty"><span class="ico">🗓️</span>No classes this month.</div>`; return; }
+
+    const days = new Set(sRows.map(r => r.strClassDate)).size;
+    const teachers = new Set(sRows.map(r => r.strEmployeeName).filter(Boolean)).size;
+    sStats.innerHTML = `<div class="chip">📚 <b>${sRows.length}</b> classes</div><div class="chip">📅 <b>${days}</b> days</div><div class="chip">👨‍🏫 <b>${teachers}</b> teachers</div>`;
+    sFilters.style.display = 'block';
+    buildDayTabs('s-days', sRows, sDay, day => { sDay = day; renderStudentFiltered(); });
+    renderStudentFiltered();
+  } catch(e) {
+    sErr.textContent = e.message; sErr.style.display = 'block';
+    document.getElementById('s-results').innerHTML = `<div class="empty"><span class="ico">⚠️</span>${e.message}</div>`;
+  } finally { sSearch.disabled = false; }
+});
+
+function renderStudentFiltered() {
+  let rows = sRows;
+  if (sDay !== 'ALL') rows = rows.filter(r => { const d = new Date(r.strClassDay); return !isNaN(d) && DN[d.getDay()] === sDay; });
+  renderCards('s-results', rows);
+}
+
+// ══════════════════════════════════════════════════════════
+// TEACHER SECTION
+// ══════════════════════════════════════════════════════════
+let tRows = [], tDay = 'ALL', tQuery = '';
+
+const tName   = document.getElementById('t-name');
+const tMonth  = document.getElementById('t-month');
+const tSearch = document.getElementById('t-search');
+const tErr    = document.getElementById('t-err');
+const tFilters= document.getElementById('t-filters');
+const tStats  = document.getElementById('t-stats');
+const tFill   = document.getElementById('t-fill');
+const tPlabel = document.getElementById('t-plabel');
+const tProgWrap = document.getElementById('t-progress-wrap');
+
+tSearch.addEventListener('click', async () => {
+  tQuery = tName.value.trim();
+  const [yr, mo] = tMonth.value.split('-').map(Number);
+  if (!tQuery || !yr) {
+    tErr.textContent = 'Enter a teacher name and select a month.';
+    tErr.style.display = 'block'; return;
+  }
+
+  tErr.style.display = 'none'; tFilters.style.display = 'none';
+  document.getElementById('t-results').innerHTML = `<div class="empty"><div class="spinner"></div>Starting search…</div>`;
+  tSearch.disabled = true; tProgWrap.style.display = 'block';
+  tFill.style.width = '0%'; tPlabel.textContent = 'Loading groups for all semesters…';
+
+  try {
+    // Step 1: Fetch all groups across all semesters in parallel
+    const groupFetches = ALL_SEMS.map(semId =>
+      post('/api/groups', { intCampusId:CAMPUS, intSemesterId:semId })
+        .then(j => (j?.data?.data || j?.data || []).map(g => ({ semId, grpId:g.intId, grpName:g.strName })))
+        .catch(() => [])
+    );
+    const groupArrays = await Promise.all(groupFetches);
+    const allGroups = groupArrays.flat();
+
+    tFill.style.width = '10%';
+    tPlabel.textContent = `Found ${allGroups.length} groups — fetching schedules…`;
+
+    if (!allGroups.length) throw new Error('No groups found.');
+
+    // Step 2: Fetch all schedules in parallel with progress
+    let done = 0;
+    const schedFetches = allGroups.map(g =>
+      post('/api/schedule', { intCampusId:CAMPUS, intSemesterId:g.semId, intGroupId:g.grpId, intYear:yr, intMonth:mo, strFacultyName:'' })
+        .then(j => {
+          done++;
+          tFill.style.width = `${10 + (done / allGroups.length) * 88}%`;
+          tPlabel.textContent = `${done} / ${allGroups.length} groups loaded…`;
+          return (j?.data?.data || j?.data || []).map(r => ({ ...r, _group: g.grpName }));
+        })
+        .catch(() => { done++; return []; })
+    );
+
+    const schedArrays = await Promise.all(schedFetches);
+    const allSchedule = schedArrays.flat();
+
+    tFill.style.width = '100%';
+    tPlabel.textContent = 'Done!';
+    setTimeout(() => { tProgWrap.style.display = 'none'; }, 800);
+
+    // Step 3: Filter by teacher name
+    const q = tQuery.toLowerCase();
+    tRows = allSchedule.filter(r => (r.strEmployeeName||'').toLowerCase().includes(q));
+    tDay = 'ALL';
+
+    if (!tRows.length) {
+      document.getElementById('t-results').innerHTML = `<div class="empty"><span class="ico">🔍</span>No classes found for "<b>${tQuery}</b>" in ${MN[mo-1]} ${yr}.</div>`;
+      return;
+    }
+
+    // Deduplicate (same class may appear in multiple group fetches if shared)
+    const seen = new Set();
+    tRows = tRows.filter(r => {
+      const key = `${r.strClassDate}-${r.strClassTime}-${r.strSubject}-${r._group}`;
+      if (seen.has(key)) return false;
+      seen.add(key); return true;
+    });
+
+    const days = new Set(tRows.map(r => r.strClassDate)).size;
+    const groups = new Set(tRows.map(r => r._group)).size;
+    tStats.innerHTML = `
+      <div class="chip">👨‍🏫 <b>${tRows[0]?.strEmployeeName||tQuery}</b></div>
+      <div class="chip">📚 <b>${tRows.length}</b> classes</div>
+      <div class="chip">📅 <b>${days}</b> days</div>
+      <div class="chip">👥 <b>${groups}</b> groups</div>`;
+    tFilters.style.display = 'block';
+    buildDayTabs('t-days', tRows, tDay, day => { tDay = day; renderTeacherFiltered(); });
+    renderTeacherFiltered();
+
+  } catch(e) {
+    tErr.textContent = e.message; tErr.style.display = 'block';
+    document.getElementById('t-results').innerHTML = `<div class="empty"><span class="ico">⚠️</span>${e.message}</div>`;
+    tProgWrap.style.display = 'none';
+  } finally { tSearch.disabled = false; }
+});
+
+function renderTeacherFiltered() {
+  let rows = tRows;
+  if (tDay !== 'ALL') rows = rows.filter(r => { const d = new Date(r.strClassDay); return !isNaN(d) && DN[d.getDay()] === tDay; });
+  renderCards('t-results', rows, tQuery, true);
 }
 </script>
 </body>
